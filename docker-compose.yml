@@ -3,6 +3,7 @@
 services:
   merchandise-service:
     build: .
+    hostname: merchandise-service
   
   stock-api:
     image: 'ghcr.io/ozon-edu-csharp-2021/stock-api:main'
