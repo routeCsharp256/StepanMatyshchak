@@ -31,7 +31,7 @@ namespace OzonEdu.MerchandiseService.Api.Infrastructure.Middlewares
                     return;
                 
                 var headers = JsonSerializer.Serialize(context.Response.Headers);
-                _logger.LogInformation($"Logging http response from middleware\nResponse headers: {headers}");
+                _logger.LogInformation($"\nLogging http response from middleware.\nResponse headers: {headers}");
             }
             catch (Exception e)
             {

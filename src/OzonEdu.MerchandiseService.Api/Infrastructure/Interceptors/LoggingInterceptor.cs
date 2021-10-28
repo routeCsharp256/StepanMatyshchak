@@ -20,12 +20,12 @@ namespace OzonEdu.MerchandiseService.Api.Infrastructure.Interceptors
             UnaryServerMethod<TRequest, TResponse> continuation)
         {
             var requestJson = JsonSerializer.Serialize(request);
-            _logger.LogInformation($"Logging request from interceptor\nRequest json: {requestJson}");
+            _logger.LogInformation($"\nLogging request from interceptor\nRequest json: {requestJson}");
             
             var response = base.UnaryServerHandler(request, context, continuation);
 
             var responseJson = JsonSerializer.Serialize(response);
-            _logger.LogInformation($"Logging response from interceptor\nResponse json: {responseJson}");
+            _logger.LogInformation($"\nLogging response from interceptor\nResponse json: {responseJson}");
             
             return response;
         }

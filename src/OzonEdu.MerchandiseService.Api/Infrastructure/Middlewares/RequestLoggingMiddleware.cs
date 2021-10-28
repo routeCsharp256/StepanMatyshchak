@@ -33,7 +33,7 @@ namespace OzonEdu.MerchandiseService.Api.Infrastructure.Middlewares
                 var route = context.Request.Path.Value;
                 var headers = JsonSerializer.Serialize(context.Request.Headers);
                 _logger.LogInformation(
-                    $"Logging http request from middleware\nRequest route: {route}\nRequest headers: {headers}");
+                    $"\nLogging http request from middleware.\nRequest route: {route}\nRequest headers: {headers}");
             }
             catch (Exception e)
             {
