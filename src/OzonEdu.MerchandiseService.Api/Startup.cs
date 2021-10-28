@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OzonEdu.MerchandiseService.Api.GrpcServices;
 using OzonEdu.MerchandiseService.Api.Infrastructure.Interceptors;
 using OzonEdu.MerchandiseService.Api.Services;
 using OzonEdu.MerchandiseService.Api.Services.Interfaces;
+using OzonEdu.MerchandiseService.Grpc;
 
 namespace OzonEdu.MerchandiseService.Api
 {
@@ -29,7 +31,7 @@ namespace OzonEdu.MerchandiseService.Api
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapGrpcService<StockApiGrpService>();
+                endpoints.MapGrpcService<MerchandiseGrpcService>();
                 endpoints.MapControllers();
             });
         }
