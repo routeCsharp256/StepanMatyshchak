@@ -6,7 +6,6 @@ using OzonEdu.MerchandiseService.Api.GrpcServices;
 using OzonEdu.MerchandiseService.Api.Infrastructure.Interceptors;
 using OzonEdu.MerchandiseService.Api.Services;
 using OzonEdu.MerchandiseService.Api.Services.Interfaces;
-using OzonEdu.MerchandiseService.Grpc;
 
 namespace OzonEdu.MerchandiseService.Api
 {

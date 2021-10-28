@@ -27,11 +27,13 @@ namespace OzonEdu.MerchandiseService.Api.Infrastructure.Middlewares
         {
             try
             {
+                if (context.Request.ContentType == "application/grpc")
+                    return;
+                
                 var route = context.Request.Path.Value;
                 var headers = JsonSerializer.Serialize(context.Request.Headers);
-                _logger.LogInformation($"Request route: {route}");
-                _logger.LogInformation($"Request headers json: {headers}");
-                _logger.LogInformation("Request logged");
+                _logger.LogInformation(
+                    $"Logging http request from middleware\nRequest route: {route}\nRequest headers: {headers}");
             }
             catch (Exception e)
             {

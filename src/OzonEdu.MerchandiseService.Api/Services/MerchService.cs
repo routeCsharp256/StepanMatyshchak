@@ -10,12 +10,12 @@ namespace OzonEdu.MerchandiseService.Api.Services
     {
         public Task<OrderMerchResponse> OrderMerch(OrderMerchRequest orderMerchRequest, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(new OrderMerchResponse());
         }
 
         public Task<GetMerchInfoForEmployeeResponse> GetMerchInfoForEmployee(long employeeId, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(new GetMerchInfoForEmployeeResponse());
         }
     }
 }
