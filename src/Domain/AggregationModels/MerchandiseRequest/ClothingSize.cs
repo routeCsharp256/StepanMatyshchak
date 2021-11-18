@@ -18,7 +18,7 @@ namespace Domain.AggregationModels.MerchandiseRequest
             "M" => M,
             "L" => L,
             "XL" => XL,
-            "XXL" => XL,
+            "XXL" => XXL,
             _ => throw new DomainException("Invalid clothing size")
         };
         
