@@ -31,12 +31,12 @@ namespace OzonEdu.MerchandiseService.Api.Controllers
             return Ok(result);
         }
         
-        [HttpGet("get-merch-info-for-employee/{employeeId:long}")]
+        [HttpGet("get-merch-info-for-employee/{employeeEmail}")]
         public async Task<ActionResult<GetMerchInfoForEmployeeResponse>> GetMerchInfoForEmployee(
-            [FromRoute] long employeeId,
+            [FromRoute] string employeeEmail,
             CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GetRequestsByEmployeeQuery(), cancellationToken);
+            var result = await _mediator.Send(new GetRequestsByEmployeeQuery{Email = employeeEmail}, cancellationToken);
             return Ok(result);
         }
     }
