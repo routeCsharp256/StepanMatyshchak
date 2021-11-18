@@ -7,7 +7,7 @@ namespace Domain.BaseModels
     public abstract class Entity
     {
         int? _requestedHashCode;
-        public virtual int Id { get; protected set; }
+        public long Id { get; protected set; }
 
         private List<INotification> _domainEvents;
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents?.AsReadOnly();

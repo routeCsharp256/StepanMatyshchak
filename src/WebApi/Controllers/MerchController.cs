@@ -1,7 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Commands;
+using Application.Commands.GiveOutMerchandise;
 using Application.Queries;
+using Application.Queries.GetRequestsByEmployee;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OzonEdu.MerchandiseService.Api.HttpModels.GetMerchInfoForEmployee;
@@ -25,7 +27,7 @@ namespace OzonEdu.MerchandiseService.Api.Controllers
         public async Task<IActionResult> OrderMerch(OrderMerchRequest orderMerchRequest,
             CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GiveOutMerchandise(), cancellationToken);
+            var result = await _mediator.Send(new GiveOutMerchandiseCommand(), cancellationToken);
             return Ok(result);
         }
         
@@ -34,7 +36,7 @@ namespace OzonEdu.MerchandiseService.Api.Controllers
             [FromRoute] long employeeId,
             CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new GetRequestsByEmployee(), cancellationToken);
+            var result = await _mediator.Send(new GetRequestsByEmployeeQuery(), cancellationToken);
             return Ok(result);
         }
     }

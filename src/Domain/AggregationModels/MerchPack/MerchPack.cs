@@ -7,6 +7,6 @@ namespace Domain.AggregationModels.MerchPack
     {        
         public MerchPackType MerchPackType { get; }
         
-        public IReadOnlyCollection<Sku> MerchPackItemSkus { get; } 
+        public IReadOnlyCollection<Sku> SkuCollection { get; } 
     }
 }

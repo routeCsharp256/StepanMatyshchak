@@ -11,7 +11,18 @@ namespace Domain.AggregationModels.MerchandiseRequest
         public static ClothingSize XL = new(5, nameof(XL));
         public static ClothingSize XXL = new(6, nameof(XXL));
 
-        public ClothingSize(int id, string name) : base(id, name)
+        public static ClothingSize Parse(string size) => size?.ToUpper() switch
+        {
+            "XS" => XS,
+            "S" => S,
+            "M" => M,
+            "L" => L,
+            "XL" => XL,
+            "XXL" => XL,
+            _ => throw new DomainException("Invalid clothing size")
+        };
+        
+        private ClothingSize(int id, string name) : base(id, name)
         {
         }
     }

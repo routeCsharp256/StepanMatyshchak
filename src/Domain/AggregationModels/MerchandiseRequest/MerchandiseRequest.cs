@@ -11,12 +11,14 @@ namespace Domain.AggregationModels.MerchandiseRequest
         private readonly Employee _employee;
         private readonly DateTimeOffset _createdAt;
 
-        public MerchandiseRequest(MerchPack.MerchPack merchPack,
+        public MerchandiseRequest(long id,
+            MerchPack.MerchPack merchPack,
             Employee employee,
             MerchandiseRequestStatus status,
             DateTimeOffset createdAt,
             DateTimeOffset? gaveOutAt)
         {
+            Id = id;
             MerchPack = merchPack;
             Employee = employee;
             Status = status;
