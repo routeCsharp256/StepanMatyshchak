@@ -2,25 +2,76 @@
 
 services:
   merchandise-service:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     hostname: merchandise-service
-  
-  stock-api:
-    image: 'ghcr.io/ozon-edu-csharp-2021/stock-api:main'
-    hostname: stock-api
-    
+    depends_on:
+      - stock-api
+      - merchandise-service-db
+
+  supply-service:
+    image: ghcr.io/ozon-edu-csharp-2021/supply-service:main
+    environment:
+      DbConfiguration__ConnectionString: "Host=host.docker.internal;Port=5426;Database=supply-service;Username=postgres;Password=supplyServicePassword"
+    hostname: supply-service
+    depends_on:
+      - supply-service-db
+
   emailing-service:
-    image: 'ghcr.io/ozon-edu-csharp-2021/emailing-service:main'
+    image: ghcr.io/ozon-edu-csharp-2021/emailing-service:main
     hostname: emailing-service
 
   employees-service:
-    image: 'ghcr.io/ozon-edu-csharp-2021/employees-service:main'
+    image: ghcr.io/ozon-edu-csharp-2021/employees-service:main
     hostname: employees-service
+    depends_on:
+      - employees-service-db
+    volumes:
+      - ./src:/src
 
-  supply-service:
-    image: 'ghcr.io/ozon-edu-csharp-2021/supply-service:main'
-    hostname: supply-service
-  
-  redis:
-    image: redis
-    hostname: redis
+  stock-api:
+    image: ghcr.io/ozon-edu-csharp-2021/stock-api:main
+    hostname: stock-api
+    environment:
+      DatabaseConnectionOptions__ConnectionString: "Host=host.docker.internal;Port=5427;Database=stock-api;Username=postgres;Password=stockApiPassword"
+    depends_on:
+      - stock-api-db
+
+  supply-service-db:
+    image: postgres:latest
+    ports:
+      - "5426:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: supplyServicePassword
+      POSTGRES_DB: supply-service
+
+  employees-service-db:
+    image: postgres:latest
+    ports:
+      - "5425:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: employees-service
+    volumes:
+      - ./db/employees-service-postgres-db/dbdata:/var/lib/postgresql/data"
+
+  stock-api-db:
+    image: postgres:latest
+    ports:
+      - "5428:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: stockApiPassword
+      POSTGRES_DB: stock-api
+      
+  merchandise-service-db:
+    image: postgres:latest
+    ports:
+      - "5427:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: merchandiseServicePassword
+      POSTGRES_DB: merchandise-service
