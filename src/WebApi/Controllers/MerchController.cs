@@ -1,9 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Commands;
+using Application.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OzonEdu.MerchandiseService.Api.HttpModels.GetMerchInfoForEmployee;
 using OzonEdu.MerchandiseService.Api.HttpModels.OrderMerch;
-using OzonEdu.MerchandiseService.Api.Services.Interfaces;
 
 namespace OzonEdu.MerchandiseService.Api.Controllers
 {
@@ -12,18 +14,18 @@ namespace OzonEdu.MerchandiseService.Api.Controllers
     [Produces("application/json")]
     public class MerchController : ControllerBase
     {
-        private readonly IMerchService _merchService;
+        private readonly IMediator _mediator;
 
-        public MerchController(IMerchService merchService)
+        public MerchController(IMediator mediator)
         {
-            _merchService = merchService;
+            _mediator = mediator;
         }
-        
+
         [HttpPost("order-merch")]
         public async Task<IActionResult> OrderMerch(OrderMerchRequest orderMerchRequest,
             CancellationToken cancellationToken)
         {
-            var result = await _merchService.OrderMerch(orderMerchRequest, cancellationToken);
+            var result = await _mediator.Send(new GiveOutMerchandise(), cancellationToken);
             return Ok(result);
         }
         
@@ -32,7 +34,7 @@ namespace OzonEdu.MerchandiseService.Api.Controllers
             [FromRoute] long employeeId,
             CancellationToken cancellationToken)
         {
-            var result = await _merchService.GetMerchInfoForEmployee(employeeId, cancellationToken);
+            var result = await _mediator.Send(new GetRequestsByEmployee(), cancellationToken);
             return Ok(result);
         }
     }

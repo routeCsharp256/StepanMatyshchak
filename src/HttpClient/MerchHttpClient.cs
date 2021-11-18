@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using OzonEdu.MerchandiseService.Api.HttpModels.GetMerchInfoForEmployee;
 using OzonEdu.MerchandiseService.Api.HttpModels.OrderMerch;
 
-namespace OzonEdu.MerchandiseService.HttpClient
+namespace HttpClient
 {
     public interface IMerchHttpClient
     {
