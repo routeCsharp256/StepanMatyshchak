@@ -6,9 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
     hostname: merchandise-service
+    environment:
+      DatabaseConnectionOptions__ConnectionString: "Host=host.docker.internal;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
     depends_on:
-      - stock-api
       - merchandise-service-db
+      - stock-api
 
   supply-service:
     image: ghcr.io/ozon-edu-csharp-2021/supply-service:main
@@ -26,7 +28,7 @@ services:
     image: ghcr.io/ozon-edu-csharp-2021/employees-service:main
     hostname: employees-service
     depends_on:
-      - employees-service-db
+      - employees-service-postgres-db
     volumes:
       - ./src:/src
 
@@ -61,7 +63,7 @@ services:
   stock-api-db:
     image: postgres:latest
     ports:
-      - "5428:5432"
+      - "5427:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: stockApiPassword
@@ -70,7 +72,7 @@ services:
   merchandise-service-db:
     image: postgres:latest
     ports:
-      - "5427:5432"
+      - "5428:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: merchandiseServicePassword
