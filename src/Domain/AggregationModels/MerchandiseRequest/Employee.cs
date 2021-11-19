@@ -5,7 +5,7 @@ namespace Domain.AggregationModels.MerchandiseRequest
 {
     public class Employee : ValueObject
     {
-        public Employee(Email email, ClothingSize clothingSize)
+        public Employee(Email email)
         {
             Email = email;
         }
