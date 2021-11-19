@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{529BC2
 		docker-compose.yml = docker-compose.yml
 		Dockerfile = Dockerfile
 		readme.md = readme.md
+		entrypoint.sh = entrypoint.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E8EA86F6-05BF-4334-85E6-25329DF5F5BD}"

@@ -4,13 +4,14 @@ services:
   merchandise-service:
     build:
       context: .
-      dockerfile: Dockerfile
-    hostname: merchandise-service
+      dockerfile: ./Dockerfile
+    ports:
+      - "5070:5000"
+      - "5072:5002"
     environment:
       DatabaseConnectionOptions__ConnectionString: "Host=host.docker.internal;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
     depends_on:
       - merchandise-service-db
-      - stock-api
 
   supply-service:
     image: ghcr.io/ozon-edu-csharp-2021/supply-service:main
@@ -28,7 +29,7 @@ services:
     image: ghcr.io/ozon-edu-csharp-2021/employees-service:main
     hostname: employees-service
     depends_on:
-      - employees-service-postgres-db
+      - employees-service-db
     volumes:
       - ./src:/src
 
