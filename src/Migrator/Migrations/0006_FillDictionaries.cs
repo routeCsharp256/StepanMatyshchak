@@ -2,7 +2,7 @@ using FluentMigrator;
 
 namespace Migrator.Temp
 {
-    [Migration(5)]
+    [Migration(6)]
     public class FillDictionaries:ForwardOnlyMigration
     {
         public override void Up()
@@ -26,7 +26,17 @@ namespace Migrator.Temp
                     (2, 'StarterPack'),
                     (3, 'ConferenceListenerPack'),
                     (4, 'ConferenceSpeakerPack'),
-                    (5, 'VeteranPack'),
+                    (5, 'VeteranPack')
+                ON CONFLICT DO NOTHING
+            ");
+            
+            Execute.Sql(@"
+                INSERT INTO request_statuses (id, name)
+                VALUES 
+                    (1, 'new'),
+                    (2, 'processing'),
+                    (3, 'done'),
+                    (4, 'declined')
                 ON CONFLICT DO NOTHING
             ");
         }

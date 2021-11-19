@@ -3,7 +3,7 @@ using FluentMigrator;
 namespace Migrator.Temp
 {
     [Migration(3)]
-    public class ItemTypes:Migration
+    public class MerchPackTypes:Migration
     {
         public override void Up()
         {
