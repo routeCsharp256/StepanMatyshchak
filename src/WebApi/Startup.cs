@@ -1,7 +1,14 @@
+using Application.Repositories;
+using Infrastructure.Configuration;
+using Infrastructure.Repositories.Implementation;
+using Infrastructure.Repositories.Infrastructure;
+using Infrastructure.Repositories.Infrastructure.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
 using OzonEdu.MerchandiseService.Api.GrpcServices;
 using OzonEdu.MerchandiseService.Api.Infrastructure.Interceptors;
 using OzonEdu.MerchandiseService.Api.Services;
@@ -20,8 +27,12 @@ namespace OzonEdu.MerchandiseService.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IMerchService, MerchService>();
+            AddMediator(services);
+            AddDatabaseComponents(services);
+            AddRepositories(services);
             
+            // Change to mediator
+            services.AddSingleton<IMerchService, MerchService>();
             services.AddGrpc(options => options.Interceptors.Add<LoggingInterceptor>());
         }
 
@@ -33,6 +44,26 @@ namespace OzonEdu.MerchandiseService.Api
                 endpoints.MapGrpcService<MerchandiseGrpcService>();
                 endpoints.MapControllers();
             });
+        }
+        
+        private static void AddMediator(IServiceCollection services)
+        {
+            services.AddMediatR(typeof(Startup), typeof(DatabaseConnectionOptions));
+        }
+
+        private void AddDatabaseComponents(IServiceCollection services)
+        {
+            services.Configure<DatabaseConnectionOptions>(Configuration.GetSection(nameof(DatabaseConnectionOptions)));
+            services.AddScoped<IDbConnectionFactory<NpgsqlConnection>, NpgsqlConnectionFactory>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IChangeTracker, ChangeTracker>();
+        }
+
+        private static void AddRepositories(IServiceCollection services)
+        {
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+            services.AddScoped<IMerchandiseRequestRepository, MerchandiseRequestRepository>();
+            services.AddScoped<IMerchPackRepository, MerchPackRepository>();
         }
     }
 }
