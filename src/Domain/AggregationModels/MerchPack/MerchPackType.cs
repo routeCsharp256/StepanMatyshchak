@@ -12,11 +12,11 @@ namespace Domain.AggregationModels.MerchPack
 
         public static MerchPackType Parse(string size) => size?.ToUpper() switch
         {
-            "welcome_pack" => WelcomePack,
-            "conference_listener_pack" => ConferenceListenerPack,
-            "conference_speaker_pack" => ConferenceListenerPack,
-            "probation_period_ending_pack" => ConferenceListenerPack,
-            "veteran_pack" => ConferenceListenerPack,
+            nameof(WelcomePack) => WelcomePack,
+            nameof(StarterPack) => ConferenceListenerPack,
+            nameof(ConferenceListenerPack) => ConferenceListenerPack,
+            nameof(ConferenceSpeakerPack) => ConferenceListenerPack,
+            nameof(VeteranPack) => ConferenceListenerPack,
             _ => throw new DomainException("Unknown merch pack type")
         };
         

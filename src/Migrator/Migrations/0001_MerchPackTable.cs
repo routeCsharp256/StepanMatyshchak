@@ -14,6 +14,7 @@ namespace OzonEdu.StockApi.Migrator.Migrations
                 CREATE TABLE if not exists merch_packs(
                     id BIGSERIAL PRIMARY KEY,
                     merch_pack_type_id INT NOT NULL,
+                    clothing_size_id INT,
                     skus bigint[]);"
             );
         }

@@ -39,7 +39,9 @@ namespace Application.Commands.GiveOutMerchandise
 
         public async Task<GiveOutMerchandiseResponse> Handle(GiveOutMerchandiseCommand request, CancellationToken cancellationToken)
         {
-            var merchPack = await _merchPackRepository.FindByType(MerchPackType.Parse(request.Type), cancellationToken);
+            var merchPack = await _merchPackRepository.FindByTypeAndSize(MerchPackType.Parse(request.Type),
+                ClothingSize.Parse(request.ClothingSize),
+                cancellationToken);
 
             var existingRequests =
                 await _merchandiseRequestRepository.GetByEmployeeEmail(Email.Create(request.Email), cancellationToken);
