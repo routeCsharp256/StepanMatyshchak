@@ -7,9 +7,9 @@ namespace Application.Repositories
 {
     public interface IMerchandiseRequestRepository
     {
-        Task<int> Create(MerchandiseRequest merchandiseRequest, CancellationToken cancellationToken);
+        Task<MerchandiseRequest> Create(MerchandiseRequest itemToCreate, CancellationToken cancellationToken);
 
-        Task Update(MerchandiseRequest merchandiseRequest, CancellationToken cancellationToken);
+        Task<MerchandiseRequest> Update(MerchandiseRequest itemToUpdate, CancellationToken cancellationToken);
         
         Task<MerchandiseRequest> GetById(int id, CancellationToken cancellationToken);
         

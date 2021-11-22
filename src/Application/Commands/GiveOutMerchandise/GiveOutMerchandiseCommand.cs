@@ -53,7 +53,8 @@ namespace Application.Commands.GiveOutMerchandise
                 createdAt: DateTimeOffset.Now
             );
 
-            var newId = await _merchandiseRequestRepository.Create(newMerchandiseRequest, cancellationToken);
+            var createdRequest = await _merchandiseRequestRepository.Create(newMerchandiseRequest, cancellationToken);
+            var newId = createdRequest.Id;
 
             newMerchandiseRequest = new MerchandiseRequest(
                 newId,

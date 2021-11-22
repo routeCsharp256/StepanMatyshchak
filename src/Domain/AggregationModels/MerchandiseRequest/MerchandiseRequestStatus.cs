@@ -12,7 +12,16 @@ namespace Domain.AggregationModels.MerchandiseRequest
 
         public static MerchandiseRequestStatus Declined = new(2, "declined");
         
-        public MerchandiseRequestStatus(int id, string name) : base(id, name)
+        public static MerchandiseRequestStatus Parse(string status) => status?.ToUpper() switch
+        {
+            "new" => New,
+            "processing" => Processing,
+            "done" => Done,
+            "declined" => Declined,
+            _ => throw new DomainException("Invalid request status")
+        };
+        
+        private MerchandiseRequestStatus(int id, string name) : base(id, name)
         {
         }
     }
