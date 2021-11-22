@@ -7,10 +7,6 @@ namespace Domain.AggregationModels.MerchandiseRequest
 {
     public class MerchandiseRequest : Entity, IAggregationRoot
     {
-        private readonly MerchPack.MerchPack _merchPack;
-        private readonly Employee _employee;
-        private readonly DateTimeOffset _createdAt;
-
         public MerchandiseRequest(long id,
             MerchPack.MerchPack merchPack,
             Employee employee,
@@ -38,13 +34,14 @@ namespace Domain.AggregationModels.MerchandiseRequest
 
         private MerchandiseRequest(MerchPack.MerchPack merchPack, Employee employee, DateTimeOffset createdAt)
         {
-            _merchPack = merchPack;
-            _employee = employee;
-            _createdAt = createdAt;
+            MerchPack = merchPack;
+            Employee = employee;
+            CreatedAt = createdAt;
             Status = MerchandiseRequestStatus.New;
         }
         
-        public static MerchandiseRequest Create(MerchPack.MerchPack merchPack,
+        public static MerchandiseRequest Create(
+            MerchPack.MerchPack merchPack,
             Employee employee,
             DateTimeOffset createdAt,
             IReadOnlyCollection<MerchandiseRequest> existingRequests)
