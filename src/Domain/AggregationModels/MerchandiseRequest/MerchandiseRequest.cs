@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Domain.AggregationModels.MerchandiseRequest.DomainEvents;
 using Domain.BaseModels;
 
@@ -52,7 +53,7 @@ namespace Domain.AggregationModels.MerchandiseRequest
                 return newRequest;
             }            
             
-            throw new DomainException("Unable to give out merchandise");
+            throw new DomainException("Unable to create new merchandise request");
         }
 
         public void GiveOut(bool isAvailableOnStock, DateTimeOffset gaveOutAt)
@@ -85,12 +86,36 @@ namespace Domain.AggregationModels.MerchandiseRequest
         {
             if (Equals(Status, MerchandiseRequestStatus.Done) || Equals(Status, MerchandiseRequestStatus.Declined))
             {
-                throw new DomainException($"Unable to decline out merchandise for request in status: {Status}");
+                throw new DomainException($"Unable to decline merchandise for request in status: {Status}");
             }
+            
+            Status = MerchandiseRequestStatus.Declined;
         }
 
         private bool CheckAbilityToGiveOut(IReadOnlyCollection<MerchandiseRequest> existingRequests, DateTimeOffset gaveOutAt)
         {
+            var existingRequestsWithSameMerch =
+                existingRequests.Where(r => Equals(r.MerchPack.MerchPackType, MerchPack.MerchPackType)).ToList();
+
+            // Если есть незавершенные заявки на такой же мерч, не разрешаем создать новую
+            if (existingRequestsWithSameMerch.Any(existingRequest =>
+                Equals(existingRequest.Status, MerchandiseRequestStatus.New) ||
+                Equals(existingRequest.Status, MerchandiseRequestStatus.Processing)))
+            {
+                return false;
+            }
+
+            // Если есть завершенные заявки на такой же мерч, сделанные менее года назад, не разрешаем создать новую
+            var oneYearTimeSpan = new TimeSpan(365, 0, 0, 0);
+            var finishedRequestsInLessThenAYear = existingRequestsWithSameMerch
+                .Where(r => 
+                    Equals(r.Status, MerchandiseRequestStatus.Done) && (gaveOutAt - r.GaveOutAt) < oneYearTimeSpan);
+
+            if (finishedRequestsInLessThenAYear.Any())
+            {
+                return false;
+            }
+
             return true;
         }
     }
