@@ -54,6 +54,7 @@ namespace Infrastructure.Repositories.Infrastructure
                         x.ClearDomainEvents();
                         return events;
                     }));
+            
             // Можно отправлять все и сразу через Task.WhenAll.
             while (domainEvents.TryDequeue(out var notification))
             {
