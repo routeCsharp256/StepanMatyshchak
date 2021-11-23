@@ -1,6 +1,6 @@
 ﻿using Domain.BaseModels;
 
-namespace Domain.AggregationModels.MerchPack
+namespace Domain.AggregationModels.MerchandiseRequest
 {
     public class MerchPackType : Enumeration
     {

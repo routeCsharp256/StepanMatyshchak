@@ -6,6 +6,6 @@ namespace Domain.AggregationModels.MerchandiseRequest.DomainEvents
     {
         public Employee Employee { get; init; }
         
-        public MerchPack.MerchPack MerchPack { get; init; }
+        public MerchPack MerchPack { get; init; }
     }
 }

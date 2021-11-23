@@ -5,7 +5,6 @@ using Application.Repositories;
 using Dapper;
 using Npgsql;
 using Domain.AggregationModels.MerchandiseRequest;
-using Domain.AggregationModels.MerchPack;
 using Infrastructure.Repositories.Dtos;
 using Infrastructure.Repositories.Infrastructure.Interfaces;
 

@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Domain.AggregationModels.MerchandiseRequest;
-using Domain.AggregationModels.MerchPack;
 
 namespace Application.Repositories
 {

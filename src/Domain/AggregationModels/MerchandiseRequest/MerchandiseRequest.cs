@@ -9,7 +9,7 @@ namespace Domain.AggregationModels.MerchandiseRequest
     public class MerchandiseRequest : Entity, IAggregationRoot
     {
         public MerchandiseRequest(long id,
-            MerchPack.MerchPack merchPack,
+            MerchPack merchPack,
             Employee employee,
             MerchandiseRequestStatus status,
             DateTimeOffset createdAt,
@@ -23,7 +23,7 @@ namespace Domain.AggregationModels.MerchandiseRequest
             GaveOutAt = gaveOutAt;
         }
 
-        public MerchPack.MerchPack MerchPack { get; }
+        public MerchPack MerchPack { get; }
         
         public Employee Employee { get; }
         
@@ -33,7 +33,7 @@ namespace Domain.AggregationModels.MerchandiseRequest
         
         public DateTimeOffset? GaveOutAt { get; private set; }
 
-        private MerchandiseRequest(MerchPack.MerchPack merchPack, Employee employee, DateTimeOffset createdAt)
+        private MerchandiseRequest(MerchPack merchPack, Employee employee, DateTimeOffset createdAt)
         {
             MerchPack = merchPack;
             Employee = employee;
@@ -42,7 +42,7 @@ namespace Domain.AggregationModels.MerchandiseRequest
         }
         
         public static MerchandiseRequest Create(
-            MerchPack.MerchPack merchPack,
+            MerchPack merchPack,
             Employee employee,
             DateTimeOffset createdAt,
             IReadOnlyCollection<MerchandiseRequest> existingRequests)

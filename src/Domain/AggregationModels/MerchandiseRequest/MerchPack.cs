@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Domain.AggregationModels.MerchandiseRequest;
 using Domain.BaseModels;
 
-namespace Domain.AggregationModels.MerchPack
+namespace Domain.AggregationModels.MerchandiseRequest
 {
     public class MerchPack : Entity
     {

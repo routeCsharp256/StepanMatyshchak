@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Application.Integration;
 using Application.Repositories;
 using Domain.AggregationModels.MerchandiseRequest;
-using Domain.AggregationModels.MerchPack;
 using MediatR;
 
 namespace Application.Commands.GiveOutMerchandise

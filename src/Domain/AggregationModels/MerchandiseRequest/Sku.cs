@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Domain.BaseModels;
 
-namespace Domain.AggregationModels.MerchPack
+namespace Domain.AggregationModels.MerchandiseRequest
 {
     public class Sku : ValueObject
     {        
