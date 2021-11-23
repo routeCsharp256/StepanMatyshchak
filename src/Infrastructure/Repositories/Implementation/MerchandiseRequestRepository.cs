@@ -8,7 +8,6 @@ using Domain.AggregationModels.MerchandiseRequest;
 using Infrastructure.Repositories.Dtos;
 using Infrastructure.Repositories.Infrastructure.Interfaces;
 using Npgsql;
-using MerchandiseRequestDto = Application.Queries.GetRequestsByEmployee.MerchandiseRequestDto;
 
 namespace Infrastructure.Repositories.Implementation
 {
@@ -29,7 +28,7 @@ namespace Infrastructure.Repositories.Implementation
         {
             const string sql = @"
                 INSERT INTO merchandise_requests (merch_pack_id, employee_email, employee_clothing_size_id, request_status_id, created_at, gave_out_at)
-                VALUES (@MerchPackId, @EmployeeEmail, @EmployeeClothingSizeId, @RequestStatusId, @CreatedAt, @GaveOutAt);";
+                VALUES (@MerchPackId, @EmployeeEmail, @EmployeeClothingSizeId, @RequestStatusId, @CreatedAt, @GaveOutAt) RETURNING id;";
 
             var parameters = new
             {
@@ -48,8 +47,22 @@ namespace Infrastructure.Repositories.Implementation
                 cancellationToken: cancellationToken);
             
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
-            await connection.ExecuteAsync(commandDefinition);
-            return await _queryExecutor.Execute(itemToCreate, () => connection.ExecuteAsync(commandDefinition));        }
+            
+            return await _queryExecutor.Execute(async () =>
+            {
+                var newId = await connection.QueryFirstAsync<long>(commandDefinition);
+
+                var entityWithId = new MerchandiseRequest(
+                    newId,
+                    itemToCreate.MerchPack,
+                    itemToCreate.Employee,
+                    itemToCreate.Status,
+                    itemToCreate.CreatedAt,
+                    itemToCreate.GaveOutAt);
+                
+                return entityWithId;
+            });
+        }
 
         public async Task<MerchandiseRequest> Update(MerchandiseRequest itemToUpdate,
             CancellationToken cancellationToken)
@@ -82,6 +95,7 @@ namespace Infrastructure.Repositories.Implementation
                 cancellationToken: cancellationToken);
             
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
+            
             return await _queryExecutor.Execute(itemToUpdate, () => connection.ExecuteAsync(commandDefinition));
         }
 
@@ -112,6 +126,7 @@ namespace Infrastructure.Repositories.Implementation
                 cancellationToken: cancellationToken);
             
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
+            
             return await _queryExecutor.Execute(
                 async () =>
                 {

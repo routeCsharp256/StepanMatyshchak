@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories.Implementation
         {
             const string sql = @"
                 INSERT INTO merch_packs (merch_pack_type_id, clothing_size_id, skus)
-                VALUES (@MerchPackTypeId, @ClothingSizeId, @Skus);";
+                VALUES (@MerchPackTypeId, @ClothingSizeId, @Skus) RETURNING id;";
 
             var parameters = new
             {
@@ -42,8 +42,19 @@ namespace Infrastructure.Repositories.Implementation
                 cancellationToken: cancellationToken);
             
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
-            await connection.ExecuteAsync(commandDefinition);
-            return await _queryExecutor.Execute(itemToCreate, () => connection.ExecuteAsync(commandDefinition));
+            
+            return await _queryExecutor.Execute(async () =>
+            {
+                var newId = await connection.QueryFirstAsync<long>(commandDefinition);
+
+                var entityWithId = new MerchPack(
+                    newId,
+                    itemToCreate.MerchPackType,
+                    itemToCreate.ClothingSize,
+                    itemToCreate.SkuCollection);
+
+                return entityWithId;
+            });
         }
 
         public async Task<MerchPack> Update(MerchPack itemToUpdate, CancellationToken cancellationToken)
@@ -68,6 +79,7 @@ namespace Infrastructure.Repositories.Implementation
                 cancellationToken: cancellationToken);
             
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
+            
             return await _queryExecutor.Execute(itemToUpdate, () => connection.ExecuteAsync(commandDefinition));
         }
 
@@ -94,6 +106,7 @@ namespace Infrastructure.Repositories.Implementation
                 cancellationToken: cancellationToken);
             
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
+            
             return await _queryExecutor.Execute(
                 async () =>
                 {
@@ -133,6 +146,7 @@ namespace Infrastructure.Repositories.Implementation
                 cancellationToken: cancellationToken);
             
             var connection = await _dbConnectionFactory.CreateConnection(cancellationToken);
+            
             return await _queryExecutor.Execute(
                 async () =>
                 {
