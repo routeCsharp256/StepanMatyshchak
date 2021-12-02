@@ -10,6 +10,8 @@ services:
       - "5092:5002"
     environment:
       DatabaseConnectionOptions__ConnectionString: "Host=merchandise-service-db;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
+    networks:
+      - ozon-network
     depends_on:
       - merchandise-service-db
       - stock-api
@@ -32,6 +34,8 @@ services:
       topic: "stock_replenished_event"
       groupId: "stock-api-service"
       SupplyApiGrpcServiceConfiguration__ServerAddress: "http://localhost:5082"
+    networks:
+      - ozon-network
     depends_on:
       - stock-api-db
       - redis
