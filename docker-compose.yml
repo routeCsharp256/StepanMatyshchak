@@ -12,7 +12,7 @@ services:
       DatabaseConnectionOptions__ConnectionString: "Host=host.docker.internal;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
     depends_on:
       - merchandise-service-db
-
+  
   stock-api:
     image: ghcr.io/ozon-edu-csharp-2021/stock-api:main
     hostname: stock-api
@@ -28,7 +28,7 @@ services:
       - supply-service-api
       - zookeeper
       - broker
-  ​
+  
   supply-service-api:
     build:
       context: ./supply-service
@@ -45,7 +45,7 @@ services:
       - supply-service-db
       - zookeeper
       - broker
-  ​
+  
   employees-service:
     build:
       context: ./employees-service
@@ -64,7 +64,7 @@ services:
       - broker
     volumes:
       - employees-service:/src"
-  ​
+  
   emailing-service:
     build:
       context: ./emailing-service
@@ -80,7 +80,7 @@ services:
       - emailing-service:/src
     networks:
       - ozon-network
-
+  
   stock-api-db:
     image: postgres:latest
     ports:
@@ -94,7 +94,7 @@ services:
       - ozon-network
     volumes:
       - stock-api-db:/var/lib/postgresql/data
-  ​
+  
   supply-service-db:
     image: postgres:latest
     ports:
@@ -108,7 +108,7 @@ services:
       - ozon-network
     volumes:
       - supply-service-db:/var/lib/postgresql/data
-  ​
+  
   employees-service-postgres-db:
     image: postgres:latest
     ports:
@@ -122,7 +122,7 @@ services:
     command: "-c log_statement=all"
     networks:
       - ozon-network
-  ​
+  
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
     hostname: zookeeper
@@ -132,7 +132,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     networks:
       - ozon-network
-  ​
+  
   broker:
     image: confluentinc/cp-kafka:6.2.0
     container_name: broker
@@ -150,7 +150,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     networks:
       - ozon-network
-  ​
+  
   redis:
     image: redis
     ports:
@@ -158,7 +158,7 @@ services:
     networks:
       - ozon-network
     hostname: redis
-  ​
+  
   jaeger:
     image: jaegertracing/all-in-one
     ports:
@@ -166,21 +166,21 @@ services:
       - "16686:16686"
     networks:
       - ozon-network
-  ​
-  networks:
-    ozon-network:
-      driver: bridge
-  ​
-  volumes:
-    ozon-volume:
-      driver: local
-    employees-service:
-      driver: local
-    emailing-service:
-      driver: local
-    stock-api-db:
-      driver: local
-    supply-service-db:
-      driver: local
-    employees-service-postgres-db:
-      driver: local
+  
+networks:
+  ozon-network:
+    driver: bridge
+  
+volumes:
+  ozon-volume:
+    driver: local
+  employees-service:
+    driver: local
+  emailing-service:
+    driver: local
+  stock-api-db:
+    driver: local
+  supply-service-db:
+    driver: local
+  employees-service-postgres-db:
+    driver: local
