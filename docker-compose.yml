@@ -9,7 +9,7 @@ services:
       - "5090:5000"
       - "5092:5002"
     environment:
-      DatabaseConnectionOptions__ConnectionString: "Host=merchandise-service-db;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
+      DatabaseConnectionOptions__ConnectionString: "Host=merchandise-service-db;Port=5432;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
     networks:
       - ozon-network
     depends_on:
@@ -141,11 +141,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: merchandiseServicePassword
       POSTGRES_DB: merchandise-service
+    volumes:
+      - merchandise-service-db:/var/lib/postgresql/data
     command: "-c log_statement=all"
     networks:
       - ozon-network
-    volumes:
-      - merchandise-service-db:/var/lib/postgresql/data
   
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
