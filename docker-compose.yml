@@ -6,16 +6,26 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - "5070:5000"
-      - "5072:5002"
+      - "5090:5000"
+      - "5092:5002"
     environment:
-      DatabaseConnectionOptions__ConnectionString: "Host=host.docker.internal;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
+      DatabaseConnectionOptions__ConnectionString: "Host=merchandise-service-db;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
     depends_on:
       - merchandise-service-db
+      - stock-api
+      - supply-service-api
+      - employees-service
+      - emailing-service
+      - redis
+      - zookeeper
+      - broker
   
   stock-api:
     image: ghcr.io/ozon-edu-csharp-2021/stock-api:main
     hostname: stock-api
+    ports:
+      - "5070:5000"
+      - "5072:5002"
     environment:
       DatabaseConnectionOptions__ConnectionString: "Host=stock-api-db;Port=5432;Database=stock-api;Username=postgres;Password=stockApiPassword"
       BootstrapServers: "broker:29092"
@@ -28,11 +38,9 @@ services:
       - supply-service-api
       - zookeeper
       - broker
-  
-  supply-service-api:
-    build:
-      context: ./supply-service
-      dockerfile: ./Dockerfile
+
+  supply-service:
+    image: ghcr.io/ozon-edu-csharp-2021/supply-service:main
     ports:
       - "5080:5080"
       - "5082:5082"
@@ -47,9 +55,8 @@ services:
       - broker
   
   employees-service:
-    build:
-      context: ./employees-service
-      dockerfile: ./Dockerfile
+    image: ghcr.io/ozon-edu-csharp-2021/employees-service:main
+    hostname: employees-service
     ports:
       - "8443:80"
     environment:
@@ -64,11 +71,10 @@ services:
       - broker
     volumes:
       - employees-service:/src"
-  
+
   emailing-service:
-    build:
-      context: ./emailing-service
-      dockerfile: ./Dockerfile
+    image: ghcr.io/ozon-edu-csharp-2021/emailing-service:main
+    hostname: emailing-service
     ports:
       - "8555:80"
     environment:
@@ -122,6 +128,20 @@ services:
     command: "-c log_statement=all"
     networks:
       - ozon-network
+
+  merchandise-service-db:
+    image: postgres:latest
+    ports:
+      - "5428:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: merchandiseServicePassword
+      POSTGRES_DB: merchandise-service
+    command: "-c log_statement=all"
+    networks:
+      - ozon-network
+    volumes:
+      - merchandise-service-db:/var/lib/postgresql/data
   
   zookeeper:
     image: confluentinc/cp-zookeeper:6.2.0
@@ -183,4 +203,6 @@ volumes:
   supply-service-db:
     driver: local
   employees-service-postgres-db:
+    driver: local
+  merchandise-service-db:
     driver: local

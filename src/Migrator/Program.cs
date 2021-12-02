@@ -12,12 +12,15 @@ namespace Migrator
         static void Main(string[] args)
         {
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .AddEnvironmentVariables()
-                .Build();
-            
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json")
+                            .AddEnvironmentVariables()
+                            .Build();
+                        
             var connectionString = configuration.GetSection("DatabaseConnectionOptions:ConnectionString").Get<string>();
+            if (string.IsNullOrWhiteSpace(connectionString))
+                            connectionString = "Host=localhost;Port=5428;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword";
+            
             var services = new ServiceCollection()
                 .AddFluentMigratorCore()
                 .ConfigureRunner(
