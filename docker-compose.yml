@@ -33,7 +33,7 @@ services:
       BootstrapServers: "broker:29092"
       topic: "stock_replenished_event"
       groupId: "stock-api-service"
-      SupplyApiGrpcServiceConfiguration__ServerAddress: "http://localhost:5082"
+      SupplyApiGrpcServiceConfiguration__ServerAddress: "http://supply-service-api:5082"
     networks:
       - ozon-network
     depends_on:
