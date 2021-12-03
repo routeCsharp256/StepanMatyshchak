@@ -54,9 +54,11 @@ namespace OzonEdu.MerchandiseService.Api
         private void AddDatabaseComponents(IServiceCollection services)
         {
             services.Configure<DatabaseConnectionOptions>(Configuration.GetSection(nameof(DatabaseConnectionOptions)));
+            
             services.AddScoped<IDbConnectionFactory<NpgsqlConnection>, NpgsqlConnectionFactory>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IChangeTracker, ChangeTracker>();
+            services.AddScoped<IQueryExecutor, QueryExecutor>();
         }
 
         private static void AddRepositories(IServiceCollection services)
