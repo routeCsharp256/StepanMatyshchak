@@ -1,5 +1,6 @@
 using Application.Repositories;
 using Infrastructure.Configuration;
+using Infrastructure.MessageBroker;
 using Infrastructure.Repositories.Implementation;
 using Infrastructure.Repositories.Infrastructure;
 using Infrastructure.Repositories.Infrastructure.Interfaces;
@@ -9,7 +10,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Npgsql;
+using OpenTracing;
 using OzonEdu.MerchandiseService.Api.GrpcServices;
+using OzonEdu.MerchandiseService.Api.HostedServices;
 using OzonEdu.MerchandiseService.Api.Infrastructure.Interceptors;
 using OzonEdu.MerchandiseService.Api.Services;
 using OzonEdu.MerchandiseService.Api.Services.Interfaces;
@@ -27,9 +30,11 @@ namespace OzonEdu.MerchandiseService.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            AddHostedServices(services);
             AddMediator(services);
             AddDatabaseComponents(services);
             AddRepositories(services);
+            AddKafkaServices(services, Configuration);
             
             // Change to mediator
             services.AddSingleton<IMerchService, MerchService>();
@@ -66,6 +71,28 @@ namespace OzonEdu.MerchandiseService.Api
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
             services.AddScoped<IMerchandiseRequestRepository, MerchandiseRequestRepository>();
             services.AddScoped<IMerchPackRepository, MerchPackRepository>();
+        }
+        
+        private static void AddKafkaServices(IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.Configure<KafkaConfiguration>(configuration);
+            services.AddSingleton<IProducerBuilderWrapper, ProducerBuilderWrapper>();
+        }
+        
+        private static void AddHostedServices(IServiceCollection services)
+        {
+            services.AddHostedService<EmployeeConsumerHostedService>();
+            services.AddHostedService<StockConsumerHostedService>();
+        }
+        
+        private static void AddOpenTracing(IServiceCollection services)
+        {
+            // services.AddSingleton<ITracer>(
+            //     sd =>
+            //     {
+            //         var tracer = new Tracer.Builder("MerchandiseService");
+            //     });
         }
     }
 }

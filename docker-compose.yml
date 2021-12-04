@@ -10,6 +10,9 @@ services:
       - "5092:5002"
     environment:
       DatabaseConnectionOptions__ConnectionString: "Host=merchandise-service-db;Port=5432;Database=merchandise-service;Username=postgres;Password=merchandiseServicePassword"
+      BootstrapServers: "broker:29092"
+      topic: "email_notification_event"
+      groupId: "merchandise-service"
     networks:
       - ozon-network
     depends_on:

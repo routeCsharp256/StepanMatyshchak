@@ -9,6 +9,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Confluent.Kafka" Version="0.12.1" />
+      <PackageReference Include="CSharpCourse.Core.Lib" Version="2.1.0" />
       <PackageReference Include="Dapper" Version="2.0.123" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
       <PackageReference Include="Npgsql" Version="6.0.0" />
